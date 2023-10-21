@@ -26,12 +26,10 @@ public class App {
         ArrayList<ItemEntry> entries = ItemEntry.readEntriesFromFile("inventory_items.txt");
             
         for(ItemEntry entry : entries) {
-            System.out.println("Product: " + entry.getProduct());
-            System.out.println("Quantity: " + entry.getQuantity());
-            System.out.println("Price: " + entry.getPrice());
-            System.out.println("-----------------------");
+            InventoryItem itemfromtxt = InventoryItem.createInventoryItem(inventory_mgnt,entry.getProduct(), entry.getQuantity(), entry.getPrice());
+            inventory_mgnt.addItem(itemfromtxt.getProductInfo(), itemfromtxt);
         }
-    
+
         Sales sales = new Sales(inventory_mgnt);
 
           // Header
