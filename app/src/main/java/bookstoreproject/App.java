@@ -4,10 +4,12 @@
 package bookstoreproject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import bookstoreproject.inventory.*;
 import bookstoreproject.sales.*;
 import bookstoreproject.io.*;
+import bookstoreproject.product.ProductInfo;
 
 public class App {
     public String makeAnnouncement() {
@@ -17,32 +19,34 @@ public class App {
     public static void main(String[] args) {
         System.out.println(new App().makeAnnouncement());
         // Initialize the Inventory and Sales classes
-        InventoryMgnt inventory_mgnt = new InventoryMgnt();
+          InventoryMgnt inventory_mgnt = new InventoryMgnt();
         InventoryItem bookItem = InventoryItem.createInventoryItem(inventory_mgnt,"Book", 20, 14.0);
         InventoryItem penItem = InventoryItem.createInventoryItem(inventory_mgnt,"Pen", 20, 2.0);
         InventoryItem pencilItem = InventoryItem.createInventoryItem(inventory_mgnt,"Pencil", 20, 1.0);
         InventoryItem stationaryItem = InventoryItem.createInventoryItem(inventory_mgnt,"Stationary", 20, 4.0);
 
+
         ArrayList<ItemEntry> entries = ItemEntry.readEntriesFromFile("inventory_items.txt");
             
         for(ItemEntry entry : entries) {
-            System.out.println("Product: " + entry.getProduct());
-            System.out.println("Quantity: " + entry.getQuantity());
+            InventoryItem itemfromtxt = InventoryItem.createInventoryItem(inventory_mgnt, entry.getProduct(), entry.getQuantity(), entry.getPrice());
+            inventory_mgnt.addItem(itemfromtxt.getProductInfo(), itemfromtxt);
             System.out.println("Price: " + entry.getPrice());
             System.out.println("-----------------------");
         }
     
         Sales sales = new Sales(inventory_mgnt);
-
+ 
           // Header
           System.out.printf("%-15s %-15s %-15s%n", "Product", "Availability", "Price");
+          HashMap<String, ProductInfo> productInfoMap = inventory_mgnt.getProductInfoMap();
+       
+        for(String product : productInfoMap.keySet()) {
+            ProductInfo productInfo = productInfoMap.get(product);
+            InventoryItem inventoryItem = inventory_mgnt.getItem(productInfo);
+            System.out.printf("%-15s %-15s %-15.2f%n", product, inventory_mgnt.isAvailable(inventoryItem, inventoryItem.getQuantityInfo().getQuantity()), inventoryItem.getPricingInfo().getPrice());
+        }
 
-          // Display initial inventory and pricing for demonstration
-          System.out.printf("%-15s %-15s %-15.2f%n", "Books", inventory_mgnt.isAvailable(bookItem, 1), bookItem.getPricingInfo().getPrice());
-          System.out.printf("%-15s %-15s %-15.2f%n", "Stationary", inventory_mgnt.isAvailable(stationaryItem, 1), stationaryItem.getPricingInfo().getPrice());
-          System.out.printf("%-15s %-15s %-15.2f%n", "Pencils", inventory_mgnt.isAvailable(pencilItem, 1), pencilItem.getPricingInfo().getPrice());
-          System.out.printf("%-15s %-15s %-15.2f%n", "Pens", inventory_mgnt.isAvailable(penItem, 1), penItem.getPricingInfo().getPrice());
-  
           // Perform some sales transactions and show results
           System.out.println("\nSales Transactions:");
           boolean bookSale = sales.makeSale(bookItem, 2);
