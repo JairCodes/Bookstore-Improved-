@@ -13,13 +13,17 @@ public class Sales {
         double price = item.getPricingInfo().getPrice();
         boolean isAvailable = inventory.isAvailable(item, quantity);
 
-        if (isAvailable) {
-            inventory.decrementQuantity(item, quantity);
+        try {
+            if (isAvailable) {
+                inventory.decrementQuantity(item, quantity);
             
-            // Update Sales Counter (assuming it's a static class)
-            SalesCounter.updateTotalSales(price * quantity);
-            SalesCounter.updateTotalUnits(quantity);
-            return true;
+                // Update Sales Counter (assuming it's a static class)
+                SalesCounter.updateTotalSales(price * quantity);
+                SalesCounter.updateTotalUnits(quantity);
+                return true;
+            }
+        } catch(NegativeQuantityException e) {
+            System.out.println("Error: " +e.getMessage());
         }
 
         return false;

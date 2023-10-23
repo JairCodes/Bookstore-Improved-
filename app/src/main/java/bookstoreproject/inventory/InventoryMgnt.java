@@ -43,7 +43,11 @@ public class InventoryMgnt {
         // Get the current quantity, set the new quantity and check if 
         int currentQuantity = item.getQuantityInfo().getQuantity();
         int newQuantity = currentQuantity - decrementBy;
-        newQuantity = Math.max(newQuantity, 0);
+
+        if(newQuantity < 0) {
+            throw new NegativeQuantityException("New quantity cannot be negative");
+        }
+        // newQuantity = Math.max(newQuantity, 0);
 
         // Update the quantity
         item.getQuantityInfo().setQuantity(newQuantity);
