@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import bookstoreproject.inventory.*;
 import bookstoreproject.sales.*;
 import bookstoreproject.io.*;
+import java.util.HashMap;
+import bookstoreproject.product.ProductInfo;
 
 public class App {
     public String makeAnnouncement() {
@@ -34,6 +36,14 @@ public class App {
 
           // Header
           System.out.printf("%-15s %-15s %-15s%n", "Product", "Availability", "Price");
+          HashMap<String, ProductInfo> productInfoMap = inventory_mgnt.getProductInfoMap();
+
+          for(String product : productInfoMap.keySet()){
+            System.out.println("testing to see");
+            ProductInfo productInfo = productInfoMap.get(product);
+            InventoryItem inventoryItem = inventory_mgnt.getItem(productInfo);
+            System.out.printf("%-15s %-15s %-15.2f%n", product, inventory_mgnt.isAvailable(inventoryItem, inventoryItem.getQuantityInfo().getQuantity()), inventoryItem.getPricingInfo().getPrice());
+          }
 
           // Display initial inventory and pricing for demonstration
           System.out.printf("%-15s %-15s %-15.2f%n", "Books", inventory_mgnt.isAvailable(bookItem, 1), bookItem.getPricingInfo().getPrice());
