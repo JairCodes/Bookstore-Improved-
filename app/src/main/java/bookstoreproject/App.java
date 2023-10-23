@@ -106,7 +106,7 @@ public class App {
           System.out.printf("\nClass of Sales object: %s%n", sales.getClass().getSimpleName());
   
           // If there's a static SalesCounter class to track total sales
-          // System.out.printf("Total Sales: %d%n", SalesCounter.totalSales);
+          System.out.printf("Total Sales: %.2f%n", SalesCounter.totalSales);
   
           // Exit the program
           System.out.println("\nExiting the program.");
