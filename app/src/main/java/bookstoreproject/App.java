@@ -90,15 +90,15 @@ public class App {
             System.out.printf("Item not found in inventory: %s%n", starWarsItemName);
         }
 
-        String ItemNotExistName = "Item does not exist";
-        ProductInfo NotExistproductInfo = inventory_mgnt.getProductInfoMap().get(ItemNotExistName);
-        InventoryItem ItemNotExist = inventory_mgnt.getItem(NotExistproductInfo);
-        if(ItemNotExist != null) {
+        String iPadItemName = "iPad";
+        ProductInfo iPaProductInfo = inventory_mgnt.getProductInfoMap().get(iPadItemName);
+        InventoryItem iPaInventoryItem = inventory_mgnt.getItem(iPaProductInfo);
+        if(iPaInventoryItem != null) {
             int ItemNotExistQuantity = 3;
-            boolean ItemNotExistSale = sales.makeSale(ItemNotExist, ItemNotExistQuantity);
-            System.out.printf("Sold %d %s: %-5s%n", ItemNotExistQuantity, ItemNotExistName, ItemNotExistSale);
+            boolean iPadItemSale = sales.makeSale(iPaInventoryItem, ItemNotExistQuantity);
+            System.out.printf("Sold %d %s: %-5s%n", ItemNotExistQuantity, iPadItemName, iPadItemSale);
         } else {
-            System.out.printf("Item not found in inventory: %s%n", ItemNotExistName);
+            System.out.printf("Item not found in inventory: %s%n", iPadItemName);
         }
 
 
