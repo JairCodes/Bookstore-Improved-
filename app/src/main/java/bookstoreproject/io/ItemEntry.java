@@ -16,7 +16,7 @@ public class ItemEntry {
         this.price = price;
     }
     
-    public static ArrayList<ItemEntry> readEntriesFromFile(String filename) {
+    public static ArrayList<ItemEntry> readEntriesFromFile(String filename) throws IllegalArgumentException {
         ArrayList<ItemEntry> entries = new ArrayList<>();
         
         try (Scanner scanner = new Scanner(new File(filename))) {
@@ -24,7 +24,10 @@ public class ItemEntry {
                 String line = scanner.nextLine();
                 String[] parts = line.split(",");
                 
-                
+                if(parts.length != 3){
+                    throw new IllegalArgumentException("Invalid line in the file: " + line);
+                }
+
                 String product = parts[0].trim();
                 if (product.startsWith("\"") && product.endsWith("\"")) {
                     product = product.substring(1, product.length() - 1);
