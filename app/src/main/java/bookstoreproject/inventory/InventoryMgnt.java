@@ -6,19 +6,19 @@ import bookstoreproject.product.*;
 public class InventoryMgnt {
 
     // HashMap to store inventory items
-    public HashMap<ProductInfo, InventoryItem> inventory;
-    public HashMap<String, ProductInfo> productInfoMap;
+    private HashMap<ProductInfo, InventoryItem> inventory;
+    private HashMap<String, ProductInfo> productInfoMap;
 
     public InventoryMgnt() {
         this.inventory = new HashMap<>();
         this.productInfoMap = new HashMap<>();
     }
 
-    public void addProductInfoMap(ProductInfo productInfo){
-        this.productInfoMap.put(productInfo.getProductInfoName(), productInfo);
-    }
-    public ProductInfo getproductInfoMap(String productName) {
-        return this.productInfoMap.get(productName);
+    public HashMap<String, ProductInfo> getProductInfoMap() {
+        for(ProductInfo productInfo : this.inventory.keySet()) {
+            productInfoMap.put(productInfo.getProductInfoName(), productInfo);
+        }
+        return productInfoMap;
     }
 
     // Add an item to the inventory
