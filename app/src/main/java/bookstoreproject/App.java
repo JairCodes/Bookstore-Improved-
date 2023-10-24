@@ -51,7 +51,7 @@ public class App {
         InventoryItem bookInventoryItem = inventory_mgnt.getItem(bookProductInfo); 
         if (bookInventoryItem != null) {
         int bookItemQuantity = 2;
-        boolean bookItemSale = sales.makeSale(bookItem, bookItemQuantity);  
+        boolean bookItemSale = sales.makeSale(bookInventoryItem, bookItemQuantity);  
         System.out.printf("Sold %d %s: %-5s%n", bookItemQuantity, bookItemName, bookItemSale);
         } else {
             System.out.printf("Item not found in inventory: %s%n", bookItemName);
@@ -62,7 +62,7 @@ public class App {
         InventoryItem pencilInventoryItem = inventory_mgnt.getItem(pencilProductInfo);
         if (pencilInventoryItem != null) {
         int pencilItemQuantity = 5;
-        boolean pencilItemSale = sales.makeSale(pencilItem, pencilItemQuantity);
+        boolean pencilItemSale = sales.makeSale(pencilInventoryItem, pencilItemQuantity);
         System.out.printf("Sold %d %s: %-5s%n", pencilItemQuantity, pencilItemName, pencilItemSale);
         } else {
             System.out.printf("Item not found in inventory: %s%n", pencilItemName);
@@ -73,7 +73,7 @@ public class App {
         InventoryItem stationaryInventoryItem = inventory_mgnt.getItem(stationaryProductInfo);
         if (stationaryInventoryItem != null) {
             int stationaryItemQuantity = 3;
-            boolean stationaryItemSale = sales.makeSale(stationaryItem, stationaryItemQuantity);
+            boolean stationaryItemSale = sales.makeSale(stationaryInventoryItem, stationaryItemQuantity);
             System.out.printf("Sold %d %s: %-5s%n", stationaryItemQuantity, stationaryItemName, stationaryItemSale);
         } else {
             System.out.printf("Item not found in inventory: %s%n", stationaryItemName);
@@ -91,12 +91,12 @@ public class App {
         }
 
         String iPadItemName = "iPad";
-        ProductInfo iPaProductInfo = inventory_mgnt.getProductInfoMap().get(iPadItemName);
-        InventoryItem iPaInventoryItem = inventory_mgnt.getItem(iPaProductInfo);
-        if(iPaInventoryItem != null) {
-            int ItemNotExistQuantity = 3;
-            boolean iPadItemSale = sales.makeSale(iPaInventoryItem, ItemNotExistQuantity);
-            System.out.printf("Sold %d %s: %-5s%n", ItemNotExistQuantity, iPadItemName, iPadItemSale);
+        ProductInfo iPadProductInfo = inventory_mgnt.getProductInfoMap().get(iPadItemName);
+        InventoryItem iPadInventoryItem = inventory_mgnt.getItem(iPadProductInfo);
+        if(iPadInventoryItem != null) {
+            int iPadInventoryQuantity = 3;
+            boolean iPadItemSale = sales.makeSale(iPadInventoryItem, iPadInventoryQuantity);
+            System.out.printf("Sold %d %s: %-5s%n", iPadInventoryQuantity, iPadItemName, iPadItemSale);
         } else {
             System.out.printf("Item not found in inventory: %s%n", iPadItemName);
         }
