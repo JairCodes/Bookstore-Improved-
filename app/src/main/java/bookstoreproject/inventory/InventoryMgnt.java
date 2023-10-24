@@ -14,15 +14,11 @@ public class InventoryMgnt {
         this.productInfoMap = new HashMap<>();
     }
 
-    public void addProductInfoMap(ProductInfo productInfo){
-        this.productInfoMap.put(productInfo.getProductInfoName(), productInfo);
-    }
-    public ProductInfo getproductInfoMap(String productName) {
-        return this.productInfoMap.get(productName);
-    }
-
     public HashMap<String, ProductInfo> getProductInfoMap() {
-        return this.productInfoMap;
+        for(ProductInfo productInfo : this.inventory.keySet()) {
+            productInfoMap.put(productInfo.getProductInfoName(), productInfo);
+        }
+        return productInfoMap;
     }
 
     // Add an item to the inventory
@@ -52,18 +48,14 @@ public class InventoryMgnt {
 
 
     // Decrement the quantity of an item by a given amount
-    public void decrementQuantity(InventoryItem item, int decrementBy) {
+    public void decrementQuantity(InventoryItem item, int decrementBy) throws NegativeQuantityException{
         // Get the current quantity, set the new quantity and check if 
         int currentQuantity = item.getQuantityInfo().getQuantity();
         int newQuantity = currentQuantity - decrementBy;
-        try{
-            newQuantity = Math.max(newQuantity, 0);
-            if (newQuantity < 0) {
+        if (newQuantity < 0) {
                 throw new NegativeQuantityException("Quantity cannot be negative.");
             }
-        }catch(NegativeQuantityException e){
-           System.out.println("Error: " + e.getMessage());
-        }
+            newQuantity = Math.max(newQuantity, 0);
         //Update the quantity
         item.getQuantityInfo().setQuantity(newQuantity);
     }
