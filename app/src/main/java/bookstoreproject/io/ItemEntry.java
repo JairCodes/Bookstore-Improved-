@@ -39,7 +39,9 @@ public class ItemEntry {
             }
         }catch (IOException e) {
             System.err.println("Error reading from the file: " + e.getMessage());
-        } 
+        }catch (IllegalArgumentException e){
+            System.out.println("error" + e.getMessage());
+        }
         return entries;
     }
 
