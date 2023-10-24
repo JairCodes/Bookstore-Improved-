@@ -8,13 +8,15 @@ import java.util.ArrayList;
 import bookstoreproject.inventory.*;
 import bookstoreproject.sales.*;
 import bookstoreproject.io.*;
+import java.util.HashMap;
+import bookstoreproject.product.ProductInfo;
 
 public class App {
     public String makeAnnouncement() {
         return "Starting Project";
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NegativeQuantityException {
         System.out.println(new App().makeAnnouncement());
         // Initialize the Inventory and Sales classes
         InventoryMgnt inventory_mgnt = new InventoryMgnt();
@@ -22,38 +24,87 @@ public class App {
         InventoryItem penItem = InventoryItem.createInventoryItem(inventory_mgnt,"Pen", 20, 2.0);
         InventoryItem pencilItem = InventoryItem.createInventoryItem(inventory_mgnt,"Pencil", 20, 1.0);
         InventoryItem stationaryItem = InventoryItem.createInventoryItem(inventory_mgnt,"Stationary", 20, 4.0);
-
         ArrayList<ItemEntry> entries = ItemEntry.readEntriesFromFile("inventory_items.txt");
             
         for(ItemEntry entry : entries) {
-            System.out.println("Product: " + entry.getProduct());
-            System.out.println("Quantity: " + entry.getQuantity());
-            System.out.println("Price: " + entry.getPrice());
-            System.out.println("-----------------------");
+            InventoryItem itemfromtxt = InventoryItem.createInventoryItem(inventory_mgnt,entry.getProduct(), entry.getQuantity(), entry.getPrice());
+            inventory_mgnt.addItem(itemfromtxt.getProductInfo(), itemfromtxt);
         }
-    
+
         Sales sales = new Sales(inventory_mgnt);
 
           // Header
           System.out.printf("%-15s %-15s %-15s%n", "Product", "Availability", "Price");
+          HashMap<String, ProductInfo> productInfoMap = inventory_mgnt.getProductInfoMap();
 
-          // Display initial inventory and pricing for demonstration
-          System.out.printf("%-15s %-15s %-15.2f%n", "Books", inventory_mgnt.isAvailable(bookItem, 1), bookItem.getPricingInfo().getPrice());
-          System.out.printf("%-15s %-15s %-15.2f%n", "Stationary", inventory_mgnt.isAvailable(stationaryItem, 1), stationaryItem.getPricingInfo().getPrice());
-          System.out.printf("%-15s %-15s %-15.2f%n", "Pencils", inventory_mgnt.isAvailable(pencilItem, 1), pencilItem.getPricingInfo().getPrice());
-          System.out.printf("%-15s %-15s %-15.2f%n", "Pens", inventory_mgnt.isAvailable(penItem, 1), penItem.getPricingInfo().getPrice());
-  
-          // Perform some sales transactions and show results
-          System.out.println("\nSales Transactions:");
-          boolean bookSale = sales.makeSale(bookItem, 2);
-          System.out.printf("Sold 2 Books: %-5s%n", bookSale);
-  
-          boolean pencilSale = sales.makeSale(pencilItem, 5);
-          System.out.printf("Sold 5 Pencils: %-5s%n", pencilSale);
-  
-          boolean stationarySale = sales.makeSale(stationaryItem, 3);
-          System.out.printf("Sold 3 Stationary items: %-5s%n", stationarySale);
-  
+          for(String product : productInfoMap.keySet()){
+            // System.out.println("testing to see");
+            ProductInfo productInfo = productInfoMap.get(product);
+            InventoryItem inventoryItem = inventory_mgnt.getItem(productInfo);
+            System.out.printf("%-15s %-15s %-15.2f%n", product, inventory_mgnt.isAvailable(inventoryItem, inventoryItem.getQuantityInfo().getQuantity()), inventoryItem.getPricingInfo().getPrice());
+          }
+
+        System.out.println("Sales Transactions: ");
+
+        String book = "Book";
+        ProductInfo bookProductInfo = inventory_mgnt.getProductInfoMap().get(book);
+        InventoryItem bookInventoryItem = inventory_mgnt.getItem(bookProductInfo); 
+        if (bookInventoryItem != null) {
+        int bsold = 2;
+        boolean bookItemSale = sales.makeSale(bookItem, bsold);  
+        System.out.printf("Sold %d %s: %-5s%n", bsold, book, bookItemSale);
+        } else {
+            System.out.printf("Item not found in inventory: %s%n", book);
+        }
+
+        String Pencil = "Pencil";
+        ProductInfo pencilProductInfo = inventory_mgnt.getProductInfoMap().get(Pencil);
+        InventoryItem pencilInventoryItem = inventory_mgnt.getItem(pencilProductInfo);
+        if (pencilInventoryItem != null) {
+        int Psold = 5;
+        boolean pencilItemSale = sales.makeSale(pencilItem, Psold);
+        System.out.printf("Sold %d %s: %-5s%n", Psold, Pencil, pencilItemSale);
+        } else {
+            System.out.printf("Item not found in inventory: %s%n", Pencil);
+        }
+
+        String Stationary = "Stationary";
+        ProductInfo stationaryProductInfo = inventory_mgnt.getProductInfoMap().get(Stationary);
+        InventoryItem stationaryInventoryItem = inventory_mgnt.getItem(stationaryProductInfo);
+        if (stationaryInventoryItem != null) {
+            int ssold = 3;
+            boolean stationaryItemSale = sales.makeSale(stationaryItem, ssold);
+            System.out.printf("Sold %d %s: %-5s%n", ssold, Stationary, stationaryItemSale);
+        } else {
+            System.out.printf("Item not found in inventory: %s%n", Stationary);
+        }
+
+        String StarWars = "Star Wars";
+        ProductInfo StarWarsproductInfo = inventory_mgnt.getProductInfoMap().get(StarWars);
+        InventoryItem starWarsItem = inventory_mgnt.getItem(StarWarsproductInfo);
+        if(starWarsItem != null) {
+            int swsold = 19;
+            
+            boolean starWarsItemSale = sales.makeSale(starWarsItem, swsold);
+            System.out.printf("Sold %d %s: %-5s%n", swsold, StarWars, starWarsItemSale);
+        } else {
+            System.out.printf("Item not found in inventory: %s%n", StarWars);
+        }
+
+        String iPadItemName = "iPad";
+        ProductInfo iPaProductInfo = inventory_mgnt.getProductInfoMap().get(iPadItemName);
+        InventoryItem iPaInventoryItem = inventory_mgnt.getItem(iPaProductInfo);
+        if(iPaInventoryItem != null) {
+            int Ipadsold = 3;
+            boolean iPadItemSale = sales.makeSale(iPaInventoryItem, Ipadsold);
+            System.out.printf("Sold %d %s: %-5s%n", Ipadsold, iPadItemName, iPadItemSale);
+        } else {
+            System.out.printf("Item not found in inventory: %s%n", iPadItemName);
+        }
+    
+
+
+
           // Display class name using Reflection for demonstration
           System.out.printf("\nClass of Sales object: %s%n", sales.getClass().getSimpleName());
   
